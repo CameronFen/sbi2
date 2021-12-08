@@ -415,7 +415,7 @@ def wrap_as_pytorch_simulator(
         # Define a wrapper to make sure that the output of the simulator is `float32`.
         def pytorch_simulator(theta: Tensor) -> tuple:
             thetaans = simulator(theta)
-            return (torch.as_tensor(thetaans[0], dtype=float32),torch.as_tensor(thetaans[1], dtype=float32)
+            return (torch.as_tensor(thetaans[0], dtype=float32),torch.as_tensor(thetaans[1], dtype=float32))
 
     return pytorch_simulator
 
