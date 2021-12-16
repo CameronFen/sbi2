@@ -74,8 +74,9 @@ def simulate_in_batches(
                 for batch in batches:
                     simulation_outputs.append(simulator(batch))
                     pbar.update(sim_batch_size)
-
-        x = torch.cat(simulation_outputs, dim=0)
+        
+        x = simulation_outputs
+        #x = torch.cat(simulation_outputs, dim=0)
     else:
         x = simulator(theta)
 
