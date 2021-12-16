@@ -542,10 +542,11 @@ def check_sbi_inputs(simulator: Callable, prior: Distribution) -> None:
     theta = prior.sample((num_prior_samples,))
     theta_batch_shape, *_ = theta.shape
     simulation = simulator(theta)
-    sim_batch_shape, *sim_event_shape = simulation.shape
+    sim_batch_shape, *sim_event_shape = simulation[0].shape
 
     assert isinstance(theta, Tensor), "Parameters theta must be a `Tensor`."
-    assert isinstance(simulation, Tensor), "Simulator output must be a `Tensor`."
+    assert isinstance(simulation[0], Tensor), "Simulator output must be a `Tensor`."
+    assert isinstance(simulation[1], Tensor), "Simulator output must be a `Tensor`."
 
     assert (
         theta_batch_shape == num_prior_samples
