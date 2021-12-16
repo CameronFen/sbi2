@@ -450,16 +450,23 @@ def handle_invalid_x(
     Note: If `exclude_invalid_x` is False, then mask will be True everywhere, ignoring
         potential NaNs and Infs.
     """
+    
+    if type(x) is list:
+      batch_size = len(x)
+      xp1 = torch.zeros((batch_size,1),dtype = torch.float32)
+      x_is_nan = torch.isnan(xp1).any(dim=1)
+      x_is_inf = torch.isinf(xp1).any(dim=1)
+      num_nans = 0
+      num_infs = 0
+    else:
+      batch_size = x.shape[0]
+      # Squeeze to cover all dimensions in case of multidimensional x.
+      x = x.reshape(batch_size, -1)
 
-    batch_size = x.shape[0]
-
-    # Squeeze to cover all dimensions in case of multidimensional x.
-    x = x.reshape(batch_size, -1)
-
-    x_is_nan = torch.isnan(x).any(dim=1)
-    x_is_inf = torch.isinf(x).any(dim=1)
-    num_nans = int(x_is_nan.sum().item())
-    num_infs = int(x_is_inf.sum().item())
+      x_is_nan = torch.isnan(x).any(dim=1)
+      x_is_inf = torch.isinf(x).any(dim=1)
+      num_nans = int(x_is_nan.sum().item())
+      num_infs = int(x_is_inf.sum().item())
 
     if exclude_invalid_x:
         is_valid_x = ~x_is_nan & ~x_is_inf
@@ -559,9 +566,12 @@ def get_simulations_since_round(
         starting_round_index: From which round onwards to return the data. We start
             counting from 0.
     """
-    return torch.cat(
-        [t for t, r in zip(data, data_round_indices) if r >= starting_round_index]
-    )
+    if type(data[0]) is list:
+      return [t for t, r in zip(data, data_round_indices) if r >= starting_round_index][0]
+    else:
+      return torch.cat(
+          [t for t, r in zip(data, data_round_indices) if r >= starting_round_index]
+      )
 
 
 def mask_sims_from_prior(round_: int, num_simulations: int) -> Tensor:
