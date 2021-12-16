@@ -611,13 +611,18 @@ def validate_theta_and_x(
     assert theta.dtype == float32, "Type of parameters must be float32."
     assert xx[0][0].dtype == float32, "Type of simulator outputs must be float32."
 
-    simulations_device = f"{x.device.type}:{x.device.index}"
+    simulations_device = f"{x[0][0].device.type}:{x[0][0].device.index}"
     if "cpu" not in simulations_device and "cpu" in training_device:
         logging.warning(
             f"""Simulations are on {simulations_device} but training device is
             set to {training_device}, moving data to device to {training_device}."""
         )
-        x = x.to(training_device)
+        #x = x.to(training_device)
+        xprime = []
+        for each in x:
+          xprime.append((each[0].to(training_device),each[1].to(training_device)))
+        theta = theta.to(training_device)
+        x = xprime
         theta = theta.to(training_device)
 
     return theta, x
