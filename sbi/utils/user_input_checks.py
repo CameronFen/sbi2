@@ -599,9 +599,9 @@ def validate_theta_and_x(
         training_device: Training device for net.
     """
     assert isinstance(theta, Tensor), "Parameters theta must be a `torch.Tensor`."
-    assert isinstance(x, Tensor), "Simulator output must be a `torch.Tensor`."
+    #assert isinstance(x, Tensor), "Simulator output must be a `torch.Tensor`."
 
-    assert theta.shape[0] == x.shape[0], (
+    assert theta.shape[0] == len(x), (
         f"Number of parameter sets (={theta.shape[0]} must match the number of "
         f"simulation outputs (={x.shape[0]})"
     )
@@ -609,7 +609,7 @@ def validate_theta_and_x(
     # I did not fuse these asserts with the `isinstance(x, Tensor)` asserts in order
     # to give more explicit errors.
     assert theta.dtype == float32, "Type of parameters must be float32."
-    assert x.dtype == float32, "Type of simulator outputs must be float32."
+    assert xx[0][0].dtype == float32, "Type of simulator outputs must be float32."
 
     simulations_device = f"{x.device.type}:{x.device.index}"
     if "cpu" not in simulations_device and "cpu" in training_device:
