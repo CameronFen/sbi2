@@ -451,7 +451,14 @@ def get_batch_loop_simulator(simulator: Callable) -> Callable:
         """Return a batch of simulations by looping over a batch of parameters."""
         assert theta.ndim > 1, "Theta must have a batch dimension."
         xs = list(map(simulator, theta))
-        return torch.cat(xs, dim=0).reshape(theta.shape[0], -1)
+        x1 = []
+        x2 = []
+        for each in xs:
+          x1.append(each[0])
+          x2.append(each[1])
+        #return torch.cat(xs, dim=0).reshape(theta.shape[0], -1)
+        return (torch.cat(x1, dim=0).reshape(theta.shape[0], -1),torch.cat(x2, dim=0).reshape(theta.shape[0], -1))
+
 
     return batch_loop_simulator
 
