@@ -609,7 +609,7 @@ def validate_theta_and_x(
     # I did not fuse these asserts with the `isinstance(x, Tensor)` asserts in order
     # to give more explicit errors.
     assert theta.dtype == float32, "Type of parameters must be float32."
-    assert xx[0][0].dtype == float32, "Type of simulator outputs must be float32."
+    assert x[0][0].dtype == float32, "Type of simulator outputs must be float32."
 
     simulations_device = f"{x[0][0].device.type}:{x[0][0].device.index}"
     if "cpu" not in simulations_device and "cpu" in training_device:
