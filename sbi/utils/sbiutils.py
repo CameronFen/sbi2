@@ -29,13 +29,16 @@ def warn_if_zscoring_changes_data(x: Tensor, duplicate_tolerance: float = 0.1) -
     """
 
     # Count unique xs.
-    num_unique = torch.unique(x, dim=0).numel()
+    if type(x) is list:
+        num_unique  = num_unique_z = len(x)
+    else:
+        num_unique = torch.unique(x, dim=0).numel()
 
-    # z-score.
-    zx = (x - x.mean(0)) / x.std(0)
+        # z-score.
+        zx = (x - x.mean(0)) / x.std(0)
 
-    # Count again and warn on too many new duplicates.
-    num_unique_z = torch.unique(zx, dim=0).numel()
+        # Count again and warn on too many new duplicates.
+        num_unique_z = torch.unique(zx, dim=0).numel()
 
     if num_unique_z < num_unique * (1 - duplicate_tolerance):
         warnings.warn(
