@@ -258,8 +258,16 @@ class NeuralInference(ABC):
             warn_on_invalid_x_for_snpec_leakage(
                 num_nans, num_infs, exclude_invalid_x, type(self).__name__, self._round
             )
-
-        return theta[is_valid_x], x[is_valid_x], prior_masks[is_valid_x]
+            
+        if type(x) is list:
+            xkeep = []
+            for i,boolele in enumerate(is_valid_x):
+                if boolele:
+                    xkeep.append(x[i])
+        else:
+            xkeep = x[is_valid_x]
+            
+        return theta[is_valid_x], xkeep, prior_masks[is_valid_x]
 
     @abstractmethod
     def train(
