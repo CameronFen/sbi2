@@ -257,7 +257,7 @@ class PosteriorEstimator(NeuralInference, ABC):
         # can `sample()` and `log_prob()`. The network is accessible via `.net`.
         if self._neural_net is None or retrain_from_scratch_each_round:
             self._neural_net = self._build_neural_net(
-                theta[self.train_indices], x[self.train_indices]
+                varsone
             )
             # If data on training device already move net as well.
             if (
@@ -266,7 +266,7 @@ class PosteriorEstimator(NeuralInference, ABC):
             ):
                 self._neural_net.to(self._device)
 
-            test_posterior_net_for_multi_d_x(self._neural_net, theta, x)
+            test_posterior_net_for_multi_d_x(self._neural_net, varsone.y, varsone)
             self._x_shape = x_shape_from_simulation(x)
 
         # Move entire net to device for training.
