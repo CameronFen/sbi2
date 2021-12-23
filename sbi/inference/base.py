@@ -7,6 +7,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union, cast
 from warnings import warn
+from torch_geometric.loader import DataLoader as DL
 
 import torch
 from torch import Tensor
@@ -348,8 +349,8 @@ class NeuralInference(ABC):
             if dataloader_kwargs is not None
             else val_loader_kwargs
         )
-        train_loader = data.DataLoader(dataset, **train_loader_kwargs)
-        val_loader = data.DataLoader(dataset, **val_loader_kwargs)
+        train_loader = DL(dataset, **train_loader_kwargs)
+        val_loader = DL(dataset, **val_loader_kwargs)
 
         return train_loader, val_loader
 
