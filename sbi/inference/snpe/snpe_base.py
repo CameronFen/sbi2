@@ -225,9 +225,14 @@ class PosteriorEstimator(NeuralInference, ABC):
         # Dataset is shared for training and validation loaders.
         #dataset = data.TensorDataset(theta, x, prior_masks)
         datasetvec = []
+        ele1 =[]
         for indx,ele in enumerate(x):
-            datasetvec.append(Data(x=ele[0], edge_index=ele[1].transpose(0,1) , y = theta[indx]))
-
+            if ele[1].size == 0:
+               ele1 = ele[1]
+            else:
+                ele1 = ele[1].transpose(0,1)
+            datasetvec.append(Data(x=ele[0], edge_index=ele1, y = theta[indx]))
+            
         dataset = datasetvec
         # Set the proposal to the last proposal that was passed by the user. For
         # atomic SNPE, it does not matter what the proposal is. For non-atomic
