@@ -224,7 +224,7 @@ class PosteriorEstimator(NeuralInference, ABC):
         #dataset = data.TensorDataset(theta, x, prior_masks)
         datasetvec = []
         for indx,ele in enumerate(x):
-            datasetvec.append(Data(x=ele[0], edge_index=ele[1] , y = theta[indx]))
+            datasetvec.append(Data(x=ele[0], edge_index=ele[1].transpose(0,1) , y = theta[indx]))
 
         dataset = datasetvec
         # Set the proposal to the last proposal that was passed by the user. For
