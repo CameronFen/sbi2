@@ -247,6 +247,8 @@ class PosteriorEstimator(NeuralInference, ABC):
             resume_training,
             dataloader_kwargs=dataloader_kwargs,
         )
+        
+        varsone = next(iter(train_loader))
 
         # First round or if retraining from scratch:
         # Call the `self._build_neural_net` with the rounds' thetas and xs as
