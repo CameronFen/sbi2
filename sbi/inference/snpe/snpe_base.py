@@ -6,6 +6,8 @@ from copy import deepcopy
 from typing import Any, Callable, Dict, Optional, Union
 from warnings import warn
 
+from torch_geometric.data import Data
+
 import torch
 from torch import Tensor, ones, optim
 from torch.nn.utils import clip_grad_norm_
