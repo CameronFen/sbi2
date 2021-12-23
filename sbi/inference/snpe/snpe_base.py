@@ -221,8 +221,12 @@ class PosteriorEstimator(NeuralInference, ABC):
         )
 
         # Dataset is shared for training and validation loaders.
-        dataset = data.TensorDataset(theta, x, prior_masks)
+        #dataset = data.TensorDataset(theta, x, prior_masks)
+        datasetvec = []
+        for indx,ele in enumerate(x):
+            datasetvec.append(Data(x=ele[0], edge_index=ele[1] , y = theta[indx]))
 
+        dataset = datasetvec
         # Set the proposal to the last proposal that was passed by the user. For
         # atomic SNPE, it does not matter what the proposal is. For non-atomic
         # SNPE, we only use the latest data that was passed, i.e. the one from the
