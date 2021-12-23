@@ -227,7 +227,7 @@ class PosteriorEstimator(NeuralInference, ABC):
         datasetvec = []
         ele1 =[]
         for indx,ele in enumerate(x):
-            if ele[1].size == 0:
+            if ele[1].numel() == 0:
                ele1 = ele[1]
             else:
                 ele1 = ele[1].transpose(0,1)
