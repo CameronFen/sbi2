@@ -231,7 +231,7 @@ class PosteriorEstimator(NeuralInference, ABC):
                ele1 = ele[1]
             else:
                 ele1 = ele[1].transpose(0,1)
-            datasetvec.append(Data(x=ele[0], edge_index=ele1, y = theta[indx]))
+            datasetvec.append(Data(x=ele[0], edge_index=ele1, y = torch.cat((theta[indx],prior_masks), axis = 0)))
             
         dataset = datasetvec
         # Set the proposal to the last proposal that was passed by the user. For
@@ -266,7 +266,7 @@ class PosteriorEstimator(NeuralInference, ABC):
             ):
                 self._neural_net.to(self._device)
 
-            test_posterior_net_for_multi_d_x(self._neural_net, varsone.y, varsone)
+            test_posterior_net_for_multi_d_x(self._neural_net, varsone.y[:,:-1], varsone)
             self._x_shape = x_shape_from_simulation(x)
 
         # Move entire net to device for training.
@@ -290,9 +290,9 @@ class PosteriorEstimator(NeuralInference, ABC):
                 self.optimizer.zero_grad()
                 # Get batches on current device.
                 theta_batch, x_batch, masks_batch = (
-                    batch[0].to(self._device),
-                    batch[1].to(self._device),
-                    batch[2].to(self._device),
+                    batch.y.reshape(training_batch_size,-1)[:,:-1].to(self._device),
+                    batch.to(self._device),
+                    batch.y.reshape(training_batch_size,-1)[:,-1].to(self._device),
                 )
 
                 batch_loss = torch.mean(
@@ -322,9 +322,9 @@ class PosteriorEstimator(NeuralInference, ABC):
             with torch.no_grad():
                 for batch in val_loader:
                     theta_batch, x_batch, masks_batch = (
-                        batch[0].to(self._device),
-                        batch[1].to(self._device),
-                        batch[2].to(self._device),
+                        batch.y.reshape(training_batch_size,-1)[:,:-1].to(self._device),
+                        batch.to(self._device),
+                        batch.y.reshape(training_batch_size,-1)[:,-1].to(self._device),
                     )
                     # Take negative loss here to get validation log_prob.
                     batch_log_prob = -self._loss(
