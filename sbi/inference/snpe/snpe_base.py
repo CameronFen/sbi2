@@ -270,7 +270,7 @@ class PosteriorEstimator(NeuralInference, ABC):
             self._x_shape = x_shape_from_simulation(x)
 
         # Move entire net to device for training.
-        self._neural_net.to(self._device)
+        # self._neural_net.to(self._device)
 
         if not resume_training:
             self.optimizer = optim.Adam(
