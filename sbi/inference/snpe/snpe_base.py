@@ -204,7 +204,7 @@ class PosteriorEstimator(NeuralInference, ABC):
 
         # Calibration kernels proposed in Lueckmann, Gonçalves et al., 2017.
         if calibration_kernel is None:
-            calibration_kernel = lambda x: ones([x.y[0]], device=self._device)
+            calibration_kernel = lambda x: ones([x.y[0].item()], device=self._device)
 
         max_num_epochs = 2 ** 31 - 1 if max_num_epochs is None else max_num_epochs
 
