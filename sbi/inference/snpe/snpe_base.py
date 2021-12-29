@@ -267,7 +267,7 @@ class PosteriorEstimator(NeuralInference, ABC):
                 self._neural_net.to(self._device)
 
             test_posterior_net_for_multi_d_x(self._neural_net, varsone.y[:,:-1], varsone)
-            self._x_shape = x_shape_from_simulation(x)
+            self._x_shape = x_shape_from_simulation(varsone)
 
         # Move entire net to device for training.
         self._neural_net.to(self._device)
