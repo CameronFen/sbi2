@@ -277,7 +277,7 @@ class PosteriorEstimator(NeuralInference, ABC):
                 list(self._neural_net.parameters()), lr=learning_rate
             )
             self.epoch, self._val_log_prob = 0, float("-Inf")
-
+        batchlen= theta[0].shape[0]
         while self.epoch <= max_num_epochs and not self._converged(
             self.epoch, stop_after_epochs
         ):
@@ -290,9 +290,9 @@ class PosteriorEstimator(NeuralInference, ABC):
                 self.optimizer.zero_grad()
                 # Get batches on current device.
                 theta_batch, x_batch, masks_batch = (
-                    batch.y.reshape(training_batch_size,-1)[:,:-1].to(self._device),
+                    batch.y.reshape(-1,batchlen + 1)[:,:-1].to(self._device),
                     batch.to(self._device),
-                    batch.y.reshape(training_batch_size,-1)[:,-1].to(self._device),
+                    batch.y.reshape(-1,batchlen + 1)[:,-1].to(self._device),
                 )
 
                 batch_loss = torch.mean(
@@ -322,9 +322,9 @@ class PosteriorEstimator(NeuralInference, ABC):
             with torch.no_grad():
                 for batch in val_loader:
                     theta_batch, x_batch, masks_batch = (
-                        batch.y.reshape(training_batch_size,-1)[:,:-1].to(self._device),
+                        batch.y.reshape(-1,batchlen + 1)[:,:-1].to(self._device),
                         batch.to(self._device),
-                        batch.y.reshape(training_batch_size,-1)[:,-1].to(self._device),
+                        batch.y.reshape(-1,batchlen + 1)[:,-1].to(self._device),
                     )
                     # Take negative loss here to get validation log_prob.
                     batch_log_prob = -self._loss(
