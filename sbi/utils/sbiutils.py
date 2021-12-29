@@ -57,7 +57,7 @@ def x_shape_from_simulation(batch_x: Tensor) -> torch.Size:
     ndims = batch_x.x.ndim
     assert ndims >= 2, "Simulated data must be a batch with at least two dimensions."
 
-    return batch_x[0].unsqueeze(0).shape
+    return batch_x.x.shape
 
 
 def del_entries(dic: Dict[str, Any], entries: Sequence = ()):
