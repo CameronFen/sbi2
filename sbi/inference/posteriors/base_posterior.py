@@ -155,10 +155,11 @@ class NeuralPosterior(ABC):
         Returns:
             `NeuralPosterior` that will use a default `x` when not explicitly passed.
         """
-        self._x = process_x(x, self._x_shape, allow_iid_x=self._allow_iid_x).to(
-            self._device
-        )
-        self._num_iid_trials = self._x.shape[0]
+        self._x = x
+#         self._x = process_x(x, self._x_shape, allow_iid_x=self._allow_iid_x).to(
+#             self._device
+#         )
+        self._num_iid_trials = 1#self._x.shape[0]
 
         return self
 
