@@ -122,8 +122,8 @@ class NeuralPosterior(ABC):
         self._iid_methods = ["snle", "snre_a", "snre_b"]
         self._allow_iid_x = method_family in self._iid_methods
 
-        if not self._allow_iid_x:
-            check_for_possibly_batched_x_shape(self._x_shape)
+#         if not self._allow_iid_x:
+#             check_for_possibly_batched_x_shape(self._x_shape)
 
     @property
     def default_x(self) -> Optional[Tensor]:
