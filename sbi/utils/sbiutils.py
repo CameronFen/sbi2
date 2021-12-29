@@ -54,7 +54,7 @@ def warn_if_zscoring_changes_data(x: Tensor, duplicate_tolerance: float = 0.1) -
 
 
 def x_shape_from_simulation(batch_x: Tensor) -> torch.Size:
-    ndims = batch_x.ndim
+    ndims = batch_x.x.ndim
     assert ndims >= 2, "Simulated data must be a batch with at least two dimensions."
 
     return batch_x[0].unsqueeze(0).shape
