@@ -385,7 +385,7 @@ class NeuralPosterior(ABC):
         """
 
         # Select and check x to condition on.
-        x = self._x_else_default_x(x)
+        x = x#self._x_else_default_x(x)
         num_samples = torch.Size(sample_shape).numel()
 
         # Move x to current device.
