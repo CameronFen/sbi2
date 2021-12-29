@@ -231,7 +231,7 @@ class PosteriorEstimator(NeuralInference, ABC):
                ele1 = ele[1]
             else:
                 ele1 = ele[1].transpose(0,1)
-            datasetvec.append(Data(x=ele[0], edge_index=ele1, y = torch.cat((theta[indx].reshape(-1,1),prior_masks), axis = 0)))
+            datasetvec.append(Data(x=ele[0], edge_index=ele1, y = torch.cat((theta[indx].reshape(-1,1),prior_masks[indx].reshape(-1,1)), axis = 0)))
             
         dataset = datasetvec
         # Set the proposal to the last proposal that was passed by the user. For
