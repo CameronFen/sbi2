@@ -11,6 +11,10 @@ import torch
 from torch import Tensor, float32
 from torch.distributions import Independent, Uniform
 
+from torch_geometric.data import Data
+from torch_geometric.loader import DataLoader
+import torch_geometric
+
 from sbi import utils as utils
 from sbi.types import Array, OneOrMore, ScalarFloat
 
@@ -91,10 +95,23 @@ def repeat_rows(x, num_reps):
     """Each row of tensor `x` is repeated `num_reps` times along leading dimension."""
     if not utils.is_positive_int(num_reps):
         raise TypeError("Number of repetitions must be a positive integer.")
-    shape = x.shape
-    x = x.unsqueeze(1)
-    x = x.expand(shape[0], num_reps, *shape[1:])
-    return merge_leading_dims(x, num_dims=2)
+#     shape = x.shape
+#     x = x.unsqueeze(1)
+#     x = x.expand(shape[0], num_reps, *shape[1:])
+#     return merge_leading_dims(x, num_dims=2)
+        if type(x) is torch_geometric.data.batch.DataBatch:
+        if num_reps > 1:
+            repdata = [x for _ in range(num_reps)]
+            loader = DataLoader(repdata, batch_size=num_reps)
+            returnx = next(iter(loader))
+        else:
+            return x
+    else:
+        shape = x.shape
+        x = x.unsqueeze(1)
+        x = x.expand(shape[0], num_reps, *shape[1:])
+        return merge_leading_dims(x, num_dims=2)
+    return returnx
 
 
 def tensor2numpy(x):
