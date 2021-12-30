@@ -554,7 +554,7 @@ def simulate_for_sbi(
 
     check_if_proposal_has_default_x(proposal)
 
-    if proposal._x is not None:
+    if type(proposal) is sbi.inference.posteriors.direct_posterior.DirectPosterior:
         theta = proposal.sample((num_simulations,), x = proposal._x)
     else:
         theta = proposal.sample((num_simulations,))
