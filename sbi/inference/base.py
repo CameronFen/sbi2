@@ -554,7 +554,10 @@ def simulate_for_sbi(
 
     check_if_proposal_has_default_x(proposal)
 
-    theta = proposal.sample((num_simulations,))
+    if proposal._x is not None:
+        theta = proposal.sample((num_simulations,), x = proposal._x)
+    else:
+        theta = proposal.sample((num_simulations,))
 
     x = simulate_in_batches(
         simulator, theta, simulation_batch_size, num_workers, show_progress_bar
