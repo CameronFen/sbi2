@@ -570,11 +570,15 @@ def get_simulations_since_round(
             counting from 0.
     """
     if type(data[0]) is list:
-      return [t for t, r in zip(data, data_round_indices) if r >= starting_round_index][0]
+        roundx = [t for t, r in zip(data, data_round_indices) if r >= starting_round_index]
+        rx = []
+        for ele in roundx:
+            rx.extend(ele)
+        return rx
     else:
-      return torch.cat(
-          [t for t, r in zip(data, data_round_indices) if r >= starting_round_index]
-      )
+        return torch.cat(
+            [t for t, r in zip(data, data_round_indices) if r >= starting_round_index]
+        )
 
 
 def mask_sims_from_prior(round_: int, num_simulations: int) -> Tensor:
