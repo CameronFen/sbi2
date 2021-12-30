@@ -389,7 +389,7 @@ class NeuralPosterior(ABC):
         num_samples = torch.Size(sample_shape).numel()
 
         # Move x to current device.
-        return x.to(self._device), num_samples
+        return x, num_samples
 
     def _potentially_replace_mcmc_parameters(
         self, mcmc_method: Optional[str], mcmc_parameters: Optional[Dict[str, Any]]
