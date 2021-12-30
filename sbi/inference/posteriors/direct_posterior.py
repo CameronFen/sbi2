@@ -387,7 +387,7 @@ class DirectPosterior(NeuralPosterior):
                 samples = utils.rejection_sample_posterior_within_prior(
                     posterior_nn=self.net,
                     prior=self._prior,
-                    x=x.to(self._device),
+                    x=x,
                     num_samples=num_samples,
                     show_progress_bars=show_progress_bars,
                     sample_for_correction_factor=True,
