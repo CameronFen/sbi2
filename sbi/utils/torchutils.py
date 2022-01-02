@@ -99,7 +99,7 @@ def repeat_rows(x, num_reps):
 #     x = x.unsqueeze(1)
 #     x = x.expand(shape[0], num_reps, *shape[1:])
 #     return merge_leading_dims(x, num_dims=2)
-        if type(x) is torch_geometric.data.batch.DataBatch:
+    if type(x) is torch_geometric.data.batch.DataBatch:
         if num_reps > 1:
             repdata = [x for _ in range(num_reps)]
             loader = DataLoader(repdata, batch_size=num_reps)
