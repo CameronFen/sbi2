@@ -150,7 +150,11 @@ class PosteriorEstimator(NeuralInference, ABC):
             self._prior = ImproperEmpirical(theta_prior, ones(theta_prior.shape[0]))
 
         return self
-
+    def calib_kernel(self, x):
+        if type(x) is torch.Tensor:
+            return ones([len(x)], device=self._device)
+        else:
+            return ones([x.y.shape[0]], device=self._device)
     def train(
         self,
         training_batch_size: int = 50,
@@ -205,7 +209,7 @@ class PosteriorEstimator(NeuralInference, ABC):
 
         # Calibration kernels proposed in Lueckmann, Gonçalves et al., 2017.
         if calibration_kernel is None:
-            calibration_kernel = lambda x: ones([x.y.shape[0]], device=self._device)
+            calibration_kernel = self.calib_kernel
 
         max_num_epochs = 2 ** 31 - 1 if max_num_epochs is None else max_num_epochs
 
