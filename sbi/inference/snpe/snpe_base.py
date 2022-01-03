@@ -9,7 +9,7 @@ from warnings import warn
 from torch_geometric.data import Data
 
 import torch
-from torch import Tensor, ones, optim
+from torch import Tensor, ones, optim, nn
 from torch.nn.utils import clip_grad_norm_
 from torch.utils import data
 from torch.utils.tensorboard import SummaryWriter
@@ -37,6 +37,7 @@ class PosteriorEstimator(NeuralInference, ABC):
         logging_level: Union[int, str] = "WARNING",
         summary_writer: Optional[SummaryWriter] = None,
         show_progress_bars: bool = True,
+        embedding_net = nn.Identity(),
         **unused_args,
     ):
         """Base class for Sequential Neural Posterior Estimation methods.
@@ -56,7 +57,7 @@ class PosteriorEstimator(NeuralInference, ABC):
 
         See docstring of `NeuralInference` class for all other arguments.
         """
-
+        self._ebedding_full = embedding_network
         super().__init__(
             prior=prior,
             device=device,
