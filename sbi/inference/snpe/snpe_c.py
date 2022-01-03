@@ -7,7 +7,7 @@ from typing import Any, Callable, Dict, Optional, Union
 import torch
 from pyknos.mdn.mdn import MultivariateGaussianMDN as mdn
 from pyknos.nflows.transforms import CompositeTransform
-from torch import Tensor, eye, ones
+from torch import Tensor, eye, ones, nn
 from torch.distributions import MultivariateNormal, Uniform
 
 from sbi import utils as utils
@@ -33,6 +33,7 @@ class SNPE_C(PosteriorEstimator):
         logging_level: Union[int, str] = "WARNING",
         summary_writer: Optional[TensorboardSummaryWriter] = None,
         show_progress_bars: bool = True,
+        embedding_net = nn.Identity(),
         **unused_args,
     ):
         r"""SNPE-C / APT [1].
@@ -85,7 +86,7 @@ class SNPE_C(PosteriorEstimator):
                 is not empty, we warn. In future versions, when the new interface of
                 0.14.0 is more mature, we will remove this argument.
         """
-
+        self.ebedding_net_full = embedding_net
         kwargs = del_entries(locals(), entries=("self", "__class__", "unused_args"))
         super().__init__(**kwargs, **unused_args)
 
