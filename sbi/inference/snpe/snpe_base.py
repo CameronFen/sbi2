@@ -37,7 +37,7 @@ class PosteriorEstimator(NeuralInference, ABC):
         logging_level: Union[int, str] = "WARNING",
         summary_writer: Optional[SummaryWriter] = None,
         show_progress_bars: bool = True,
-        embedding_net = None,
+        embedding_net = nn.Identity(),
         **unused_args,
     ):
         """Base class for Sequential Neural Posterior Estimation methods.
@@ -249,7 +249,11 @@ class PosteriorEstimator(NeuralInference, ABC):
             dataloader_kwargs=dataloader_kwargs,
         )
         
-        varsone = next(iter(train_loader))
+        varsone_y = next(iter(train_loader))
+
+        x_in = varsone_y.y[:,:-1]
+
+        y_in = self._embedding_full(varsone_y)
 
         # First round or if retraining from scratch:
         # Call the `self._build_neural_net` with the rounds' thetas and xs as
@@ -258,7 +262,7 @@ class PosteriorEstimator(NeuralInference, ABC):
         # can `sample()` and `log_prob()`. The network is accessible via `.net`.
         if self._neural_net is None or retrain_from_scratch_each_round:
             self._neural_net = self._build_neural_net(
-                varsone
+                x_in, y_in
             )
             # If data on training device already move net as well.
             if (
@@ -267,8 +271,8 @@ class PosteriorEstimator(NeuralInference, ABC):
             ):
                 self._neural_net.to(self._device)
 
-            test_posterior_net_for_multi_d_x(self._neural_net, varsone.y[:,:-1], varsone)
-            self._x_shape = x_shape_from_simulation(varsone)
+            test_posterior_net_for_multi_d_x(self._neural_net, x_in, y_in)
+            self._x_shape = x_shape_from_simulation(y_in)
 
         # Move entire net to device for training.
         self._neural_net.to(self._device)
