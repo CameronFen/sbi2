@@ -57,7 +57,7 @@ class PosteriorEstimator(NeuralInference, ABC):
 
         See docstring of `NeuralInference` class for all other arguments.
         """
-        self._ebedding_full = embedding_net
+        self._embedding_full = embedding_net
         super().__init__(
             prior=prior,
             device=device,
