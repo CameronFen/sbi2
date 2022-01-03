@@ -102,11 +102,10 @@ def repeat_rows(x, num_reps):
     if type(x) is torch_geometric.data.batch.DataBatch:
         if num_reps > 1:
             repdata = []
-            for each in x:
-                print(each)
-                wait = input('input')
+            b_size = x.batch[-1].item()
+            for each in x.to_data_list():
                 repdata.extend([each for _ in range(num_reps)])
-            loader = DataLoader(repdata, batch_size=num_reps)
+            loader = DataLoader(repdata, batch_size=num_reps*(b_size + 1))
             returnx = next(iter(loader))
         else:
             return x
