@@ -86,7 +86,6 @@ class SNPE_C(PosteriorEstimator):
                 is not empty, we warn. In future versions, when the new interface of
                 0.14.0 is more mature, we will remove this argument.
         """
-        self.ebedding_net_full = embedding_net
         kwargs = del_entries(locals(), entries=("self", "__class__", "unused_args"))
         super().__init__(**kwargs, **unused_args)
 
