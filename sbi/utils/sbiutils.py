@@ -54,7 +54,7 @@ def warn_if_zscoring_changes_data(x: Tensor, duplicate_tolerance: float = 0.1) -
 
 
 def x_shape_from_simulation(batch_x: Tensor) -> torch.Size:
-if type(batch_x) is torch.Tensor:
+    if type(batch_x) is torch.Tensor:
         ndims = batch_x.ndim
         shape = batch_x.shape
     else:
