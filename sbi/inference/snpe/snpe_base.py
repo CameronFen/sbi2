@@ -283,7 +283,7 @@ class PosteriorEstimator(NeuralInference, ABC):
 
         if not resume_training:
             self.optimizer = optim.Adam(
-                list(self._neural_net.parameters()), lr=learning_rate
+                list(list(self._neural_net.parameters()) + list(self._embedding_full.parameters())), lr=learning_rate
             )
             self.epoch, self._val_log_prob = 0, float("-Inf")
         batchlen= theta[0].shape[0]
@@ -315,7 +315,7 @@ class PosteriorEstimator(NeuralInference, ABC):
                 batch_loss.backward()
                 if clip_max_norm is not None:
                     clip_grad_norm_(
-                        self._neural_net.parameters(), max_norm=clip_max_norm
+                       list(self._neural_net.parameters()) + list(self._embedding_full.parameters()), max_norm=clip_max_norm
                     )
                 self.optimizer.step()
 
