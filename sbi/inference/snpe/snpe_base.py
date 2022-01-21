@@ -300,7 +300,7 @@ class PosteriorEstimator(NeuralInference, ABC):
                 # Get batches on current device.
                 theta_batch, x_batch, masks_batch = (
                     batch.y.reshape(-1,batchlen + 1)[:,:-1].to(self._device),
-                    batch.to(self._device),
+                    self._embedding_full(batch).to(self._device),
                     batch.y.reshape(-1,batchlen + 1)[:,-1].to(self._device),
                 )
 
@@ -332,7 +332,7 @@ class PosteriorEstimator(NeuralInference, ABC):
                 for batch in val_loader:
                     theta_batch, x_batch, masks_batch = (
                         batch.y.reshape(-1,batchlen + 1)[:,:-1].to(self._device),
-                        batch.to(self._device),
+                        self._embedding_full(batch).to(self._device),
                         batch.y.reshape(-1,batchlen + 1)[:,-1].to(self._device),
                     )
                     # Take negative loss here to get validation log_prob.
