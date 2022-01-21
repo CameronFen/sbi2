@@ -283,7 +283,7 @@ class PosteriorEstimator(NeuralInference, ABC):
 
         if not resume_training:
             self.optimizer = optim.Adam(
-                list(list(self._neural_net.parameters()) + list(self._embedding_full.parameters())), lr=learning_rate
+                list(self._neural_net.parameters()) + list(self._embedding_full.parameters()), lr=learning_rate
             )
             self.epoch, self._val_log_prob = 0, float("-Inf")
         batchlen= theta[0].shape[0]
